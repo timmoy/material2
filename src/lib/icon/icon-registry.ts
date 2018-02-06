@@ -530,7 +530,17 @@ export const ICON_REGISTRY_PROVIDER = {
 
 /** Clones an SVGElement while preserving type information. */
 function cloneSvg(svg: SVGElement): SVGElement {
-  return svg.cloneNode(true) as SVGElement;
+  let svgclone = svg.cloneNode(true) as SVGElement;
+  let svgdefs = svgclone.getElementsByTagName("def");
+  if(svgdefs.length > 0){
+	  let number = 0;
+	  let lastChar = svgdefs.item(0).id.slice(-1);
+	  if(typeof lastChar == 'number'){
+		number = lastChar ++;
+	  }
+	  svgdefs.item(0).setAttribute('id', 'cloned' + number);
+  }
+  return svgclone;
 }
 
 /** Returns the cache key to use for an icon namespace and name. */
