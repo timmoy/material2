@@ -426,7 +426,7 @@ export class MatIconRegistry {
   /**
    * Creates a DOM element from the given SVG string.
    */
-  private _svgElementFromString(str: string): SVGElement {
+  private _svgElementFromString(str: string): SVGElement {   // Changes here???
     if (this._document || typeof document !== 'undefined') {
       const div = (this._document || document).createElement('DIV');
       div.innerHTML = str;
