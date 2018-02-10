@@ -1,4 +1,5 @@
-
+@import '../../lib/core/theming/_theming'; // Gets the theming functions 
+@import '../../demo-app/theme'; // Gets the predefined colors
 .demo-button {
   button, a {
     margin: 8px;
@@ -9,6 +10,8 @@
     display: flex;
     align-items: center;
     margin: 8px;
+	background-color: mat-color($candy-app-primary, 900);
+	color: mat-color($candy-app-primary, 900-contrast);
   }
 
   p {
