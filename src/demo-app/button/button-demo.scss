@@ -11,7 +11,7 @@
     align-items: center;
     margin: 8px;
 	background-color: mat-color($candy-app-primary, 900);
-	color: mat-color($candy-app-primary, 900-contrast);
+	color: mat-color($candy-app-primary, '900-contrast');
   }
 
   p {
