@@ -426,9 +426,33 @@ export class MatIconRegistry {
   /**
    * Creates a DOM element from the given SVG string.
    */
-  private _svgElementFromString(str: string): SVGElement {   // Changes here???
+  private _svgElementFromString(str: string): SVGElement {
     if (this._document || typeof document !== 'undefined') {
       const div = (this._document || document).createElement('DIV');
+  
+      const innerStr = str.match(/<svg[^>]*>((.|[\r\n])*)<\/svg>/);
+      if (innerStr && (innerStr.length > 1)) {
+        div.innerHTML = innerStr[1];
+        var idattrs = div.querySelectorAll('defs [id]');
+        Array.from(idattrs).forEach((attr) => {
+          if(this._document.GetElementById(attr.id) != null && !div.innerHTML.includes(attr.id)){
+	        const idlookup = attr.id + "_" + String(Date.getDate());
+            var attrFill = div.querySelectorAll("[fill='url(#"+attr.id+")']");
+            if (attrFill) {
+              Array.from(attrFill).forEach((a) => {
+                a.setAttribute("fill", "url(#" + idlookup + ")");
+              });
+            }
+            var attrXlinkHref = div.querySelectorAll('[xlink\\:href="#'+attr.id+'"]');
+            if (attrXlinkHref) {
+              Array.from(attrXlinkHref).forEach((a) => a.setAttribute("xlink:href", "#" + idlookup));
+            }
+            attr.id = idlookup;
+		  }
+        });
+        str = str.replace(/<svg([^>]*)>((.|[\r\n])*)<\/svg>/, "<svg>" + div.innerHTML + "</svg>");
+      }
+      
       div.innerHTML = str;
       const svg = div.querySelector('svg') as SVGElement;
       if (!svg) {
@@ -530,17 +554,7 @@ export const ICON_REGISTRY_PROVIDER = {
 
 /** Clones an SVGElement while preserving type information. */
 function cloneSvg(svg: SVGElement): SVGElement {
-  let svgclone = svg.cloneNode(true) as SVGElement;
-  let svgdefs = svgclone.getElementsByTagName("def");
-  if(svgdefs.length > 0){
-	  let number = 0;
-	  let lastChar = svgdefs.item(0).id.slice(-1);
-	  if(typeof lastChar == 'number'){
-		number = lastChar ++;
-	  }
-	  svgdefs.item(0).setAttribute('id', 'cloned' + number);
-  }
-  return svgclone;
+  return svg.cloneNode(true) as SVGElement;
 }
 
 /** Returns the cache key to use for an icon namespace and name. */
