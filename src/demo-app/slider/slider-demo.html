@@ -14,6 +14,8 @@ Label <mat-slider #slidey aria-label="Basic slider"></mat-slider>
 {{slider2.value}}
 <input [(ngModel)]="max" type="number">
 
+<mat-slider #testSlider class="example-margin" min="0" max="1" step="0.001"></mat-slider>
+
 <h1>Disabled Slider</h1>
 <mat-slider disabled [(ngModel)]="disabledValue" [tickInterval]="1" aria-label="Disabled slider">
 </mat-slider>
