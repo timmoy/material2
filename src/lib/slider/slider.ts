@@ -214,6 +214,9 @@ export class MatSlider extends _MatSliderMixinBase
   @Input()
   get value(): number | null {
     // If the value needs to be read and it is still uninitialized, initialize it to the min.
+    if (!this._isSliding) {
+      this._isSliding = true;
+    }
     if (this._value === null) {
       this.value = this._min;
     }
