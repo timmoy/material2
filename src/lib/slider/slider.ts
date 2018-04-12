@@ -214,9 +214,6 @@ export class MatSlider extends _MatSliderMixinBase
   @Input()
   get value(): number | null {
     // If the value needs to be read and it is still uninitialized, initialize it to the min.
-    if (!this._isSliding) {
-      this._isSliding = true;
-    }
     if (this._value === null) {
       this.value = this._min;
     }
@@ -224,11 +221,16 @@ export class MatSlider extends _MatSliderMixinBase
   }
   set value(v: number | null) {
     if (v !== this._value) {
+      this._isSliding = true;
       this._value = coerceNumberProperty(v);
       this._percent = this._calculatePercentage(this._value);
 
       // Since this also modifies the percentage, we need to let the change detection know.
       this._changeDetectorRef.markForCheck();
+    } else {
+      if (this._isSliding) {
+        this._isSliding = false;
+      }
     }
   }
   private _value: number | null = null;
