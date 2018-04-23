@@ -122,6 +122,7 @@ export const _MatSliderMixinBase =
     '[class.mat-slider-horizontal]': '!vertical',
     '[class.mat-slider-axis-inverted]': '_invertAxis',
     '[class.mat-slider-sliding]': '_isSliding',
+    '[class.mat-slider-sliding-chrome]': '_isSlidingChrome',
     '[class.mat-slider-thumb-label-showing]': 'thumbLabel',
     '[class.mat-slider-vertical]': 'vertical',
     '[class.mat-slider-min-value]': '_isMinValue',
@@ -221,15 +222,17 @@ export class MatSlider extends _MatSliderMixinBase
   }
   set value(v: number | null) {
     if (v !== this._value) {
-      this._isSliding = true;
       this._value = coerceNumberProperty(v);
       this._percent = this._calculatePercentage(this._value);
+      if (this._isChrome) {
+        this._isSlidingChrome = true;
+      }
 
       // Since this also modifies the percentage, we need to let the change detection know.
       this._changeDetectorRef.markForCheck();
     } else {
-      if (this._isSliding) {
-        this._isSliding = false;
+      if (this._isChrome && this._isSlidingChrome) {
+       this._isSlidingChrome = false;
       }
     }
   }
@@ -294,6 +297,17 @@ export class MatSlider extends _MatSliderMixinBase
    * Used to determine if there should be a transition for the thumb and fill track.
    */
   _isSliding: boolean = false;
+
+  /**
+   * Whether or not the thumb is sliding in a chrome slider.
+   * Used to determine if there should be a transition for the thumb and fill track.
+   */
+  _isSlidingChrome: boolean = false;
+
+  /**
+   * Whether the user is using chrome
+   */
+  _isChrome: boolean = navigator.userAgent.indexOf('Chrome') !== -1 ? true : false;
 
   /**
    * Whether or not the slider is active (clicked or sliding).

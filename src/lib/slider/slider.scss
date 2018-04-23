@@ -162,6 +162,14 @@ $mat-slider-focus-ring-size: 30px !default;
   }
 }
 
+// Custom Chrome Slider sliding state.
+.mat-slider-sliding-chrome {
+  .mat-slider-track-fill,
+  .mat-slider-track-background,
+  .mat-slider-thumb-container {
+    transition-duration: 0ms;
+  }
+}
 
 // Slider with ticks when not disabled.
 .mat-slider-has-ticks {
